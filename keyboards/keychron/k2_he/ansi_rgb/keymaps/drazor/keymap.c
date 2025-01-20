@@ -94,14 +94,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-uint8_t  caps_lock_letter_list[27] = CAPS_LOCK_LETTER_LIST;
+uint8_t caps_lock_letter_list[27] = CAPS_LOCK_LETTER_LIST;
 uint8_t number_list[15] = NUMBER_LIST;
 uint8_t func_list[30] = FUNC_LIST;
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    if (host_keyboard_led_state().caps_lock) {
+    if (host_keyboard_led_state().caps_lock && user_config.caps_lock_ind) {
         HSV hsv = user_config.caps_lock_hs;
-        hsv.v = rgb_matrix_get_val();
+        hsv.v = user_config.caps_lock_br;
         RGB rgb = hsv_to_rgb(hsv);
 
         for (uint8_t i = 0; i < ARRAY_SIZE(caps_lock_letter_list); i++) {
@@ -109,9 +109,9 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         }
     }
 
-    if (IS_LAYER_ON(WIN_FN) || IS_LAYER_ON(MAC_FN)) {
+    if ((IS_LAYER_ON(WIN_FN) || IS_LAYER_ON(MAC_FN)) && user_config.layer1_ind) {
         HSV hsv = user_config.layer1_hs;
-        hsv.v = rgb_matrix_get_val();
+        hsv.v = user_config.layer1_br;
         RGB rgb = hsv_to_rgb(hsv);
 
         for (uint8_t j = 0; j < ARRAY_SIZE(func_list); j++) {
@@ -119,9 +119,9 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         }
     }
 
-    if (IS_LAYER_ON(WIN_NUM) || IS_LAYER_ON(MAC_NUM)) {
+    if ((IS_LAYER_ON(WIN_NUM) || IS_LAYER_ON(MAC_NUM)) && user_config.layer2_ind) {
         HSV hsv = user_config.layer2_hs;
-        hsv.v = rgb_matrix_get_val();
+        hsv.v = user_config.layer2_br;
         RGB rgb = hsv_to_rgb(hsv);
 
         for (uint8_t j = 0; j < ARRAY_SIZE(number_list); j++) {
