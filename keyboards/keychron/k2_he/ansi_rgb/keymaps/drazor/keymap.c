@@ -95,7 +95,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 uint8_t caps_lock_letter_list[27] = CAPS_LOCK_LETTER_LIST;
-uint8_t number_list[15] = NUMBER_LIST;
+uint8_t number_list[14] = NUMBER_LIST;
 uint8_t func_list[30] = FUNC_LIST;
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
