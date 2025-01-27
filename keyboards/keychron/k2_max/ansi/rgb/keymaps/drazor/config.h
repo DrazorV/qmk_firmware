@@ -1,7 +1,3 @@
-//
-// Created by DrazorV on 18/1/2025.
-//
-
 #ifndef CONFIG_H
 #define CONFIG_H
 
@@ -13,15 +9,18 @@
 #define FUNC_LIST \
 { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 17, 18, 19, 20, 31, 32, 33, 34, 35, 36, 47, 48, 49, 50, 51, 65, 66}
 
+#ifdef DYNAMIC_KEYMAP_LAYER_COUNT
+#undef DYNAMIC_KEYMAP_LAYER_COUNT
+#endif
+
 #define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
 #ifdef SNLED27351_CURRENT_TUNE
 #undef SNLED27351_CURRENT_TUNE
 #endif
 
- #define SNLED27351_CURRENT_TUNE \
+#define SNLED27351_CURRENT_TUNE \
     { 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40 }
-
 
 #ifdef RGB_MATRIX_ENABLE
     // Startup values, when none have been set
