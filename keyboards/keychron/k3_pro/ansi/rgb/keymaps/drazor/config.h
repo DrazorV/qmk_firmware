@@ -1,12 +1,7 @@
-//
-// Created by DrazorV on 22/12/2023.
-//
-
 #ifndef CONFIG_H
 #define CONFIG_H
-#define MAX_DEFERRED_EXECUTORS 16
-#define EECONFIG_USER_DATA_SIZE 15
 
+#define EECONFIG_USER_DATA_SIZE 16
 #define CAPS_LOCK_LETTER_LIST \
 { 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 61, 62, 63, 64, 65, 66, 67 }
 #define NUMBER_LIST \
@@ -20,6 +15,13 @@
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
+#ifdef SNLED27351_CURRENT_TUNE
+#undef SNLED27351_CURRENT_TUNE
+#endif
+
+#define SNLED27351_CURRENT_TUNE \
+    { 0x34, 0x34, 0x34, 0x34, 0x34, 0x34, 0x34, 0x34, 0x34, 0x34, 0x34, 0x34 }
+
 #ifdef RGB_MATRIX_ENABLE
     // Startup values, when none have been set
     #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_RIVERFLOW
@@ -32,4 +34,5 @@
     #define ENABLE_RGB_MATRIX_RIVERFLOW
 
 #endif //RGB_MATRIX_ENABLE
-#endif //CONFIG_H
+
+#endif // CONFIG_H
