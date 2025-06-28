@@ -47,36 +47,6 @@
         },
         {
             "key": "KC_USB"
-        },
-        {
-            "key": "RP_P0"
-        },
-        {
-            "key": "RP_P1"
-        },
-        {
-            "key": "RP_P2"
-        },
-        {
-            "key": "RP_END"
-        },
-        {
-            "key": "RL_MOD"
-        },
-        {
-            "key": "HS_BATQ"
-        },
-        {
-            "key": "HS_DIR"
-        },
-        {
-            "key": "BT_TEST"
-        },
-        {
-            "key": "HS_SIRI"
-        },
-        {
-            "key": "HS_CT_A"
         }
     ],
     "dynamic_keymap": {
