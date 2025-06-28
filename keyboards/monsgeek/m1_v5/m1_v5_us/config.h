@@ -12,7 +12,6 @@
 #define BAT_FULL_STATE                      1
 
 #define HS_RGB_INDICATOR_COUNT              99
-#define HS_RGB_BAT_COUNT                    1
 
 #define MD_BT1_NAME                         "M1 V5"
 #define MD_BT2_NAME                         "M1 V5"
@@ -31,12 +30,6 @@
 #define HS_LBACK_COLOR_BT3                  RGB_BLUE
 #define HS_LBACK_COLOR_2G4                  RGB_RED
 #define HS_LBACK_COLOR_USB                  RGB_WHITE
-
-#define HS_PAIR_COLOR_BT1                   RGB_BLUE
-#define HS_PAIR_COLOR_BT2                   RGB_BLUE
-#define HS_PAIR_COLOR_BT3                   RGB_BLUE
-#define HS_PAIR_COLOR_2G4                   RGB_RED
-#define HS_PAIR_COLOR_USB                   RGB_WHITE
 
 /* Battery */
 #define BATTERY_CAPACITY_LOW                15

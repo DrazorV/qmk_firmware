@@ -86,11 +86,45 @@ void eeconfig_init_user() {
 }
 
 // TODO: cleanup
-void rgb_matrix_hs_indicator_set(uint8_t index, RGB rgb, uint32_t interval, uint8_t times);
+void m1v5_blink_advanced(uint8_t index, RGB rgb, uint32_t interval, uint8_t times);
+void hs_reset_settings(void);
+void m1v5_bt_test(void);
+
+uint32_t ee_clr_callback(uint32_t trigger_time, void *cb_arg) {
+    hs_reset_settings();
+    return 0;
+}
 
 uint32_t hs_ct_time;
 bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case QK_BOOT: {
+            if (record->event.pressed) {
+                dprintf("into boot!!!\r\n");
+                eeconfig_disable();
+                bootloader_jump();
+            }
+        } break;
+
+        case BT_TEST: {
+            if (record->event.pressed) {
+                m1v5_bt_test();
+            }
+            return false;
+        } break;
+
+        case EE_CLR: {
+            static deferred_token delayed_exec = INVALID_DEFERRED_TOKEN;
+
+            if (record->event.pressed) {
+                delayed_exec = defer_exec(5000, ee_clr_callback, NULL);
+                return false;
+            } else if (delayed_exec != INVALID_DEFERRED_TOKEN) {
+                cancel_deferred_exec(delayed_exec);
+                delayed_exec = INVALID_DEFERRED_TOKEN;
+            }
+        } break;
+
         case KC_A: {
             if (confinfo.wasd_act_as_directional) {
                 if (record->event.pressed) {
@@ -99,8 +133,6 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code16(KC_LEFT);
                 }
                 return false;
-            } else {
-                return true;
             }
         } break;
 
@@ -112,8 +144,6 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code16(KC_DOWN);
                 }
                 return false;
-            } else {
-                return true;
             }
         } break;
 
@@ -125,8 +155,6 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code16(KC_RGHT);
                 }
                 return false;
-            } else {
-                return true;
             }
         } break;
 
@@ -151,8 +179,6 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code16(KC_A);
                 }
                 return false;
-            } else {
-                return true;
             }
         } break;
 
@@ -164,8 +190,6 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code16(KC_S);
                 }
                 return false;
-            } else {
-                return true;
             }
         } break;
 
@@ -177,8 +201,6 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code16(KC_D);
                 }
                 return false;
-            } else {
-                return true;
             }
         } break;
 
@@ -190,8 +212,6 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code16(KC_W);
                 }
                 return false;
-            } else {
-                return true;
             }
         } break;
 
@@ -213,7 +233,7 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
                 confinfo.wasd_act_as_directional = !confinfo.wasd_act_as_directional;
                 RGB rgb_test_open;
                 rgb_test_open = hsv_to_rgb((HSV){.h = 0, .s = 0, .v = RGB_MATRIX_VAL_STEP * 5});
-                rgb_matrix_hs_indicator_set(0xFF, (RGB){rgb_test_open.r, rgb_test_open.g, rgb_test_open.b}, 250, 1);
+                m1v5_blink_advanced(0xFF, (RGB){rgb_test_open.r, rgb_test_open.g, rgb_test_open.b}, 250, 1);
                 eeconfig_update_user(confinfo.raw);
             }
             return false;
@@ -261,7 +281,7 @@ void housekeeping_task_user(void) {
         confinfo.ctrl_act_as_menu = !confinfo.ctrl_act_as_menu;
         RGB rgb_test_open;
         rgb_test_open = hsv_to_rgb((HSV){.h = 0, .s = 0, .v = RGB_MATRIX_VAL_STEP * 5});
-        rgb_matrix_hs_indicator_set(0xFF, (RGB){rgb_test_open.r, rgb_test_open.g, rgb_test_open.b}, 250, 1);
+        m1v5_blink_advanced(0xFF, (RGB){rgb_test_open.r, rgb_test_open.g, rgb_test_open.b}, 250, 1);
         eeconfig_update_user(confinfo.raw);
         hs_ct_time = 0;
     }
