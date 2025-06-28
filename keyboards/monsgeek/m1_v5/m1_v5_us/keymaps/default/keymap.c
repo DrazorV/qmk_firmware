@@ -1,6 +1,7 @@
 // Copyright 2024 yangzheng20003 (@yangzheng20003)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include "module.h"
 #include QMK_KEYBOARD_H
 
 enum layers {
@@ -85,13 +86,25 @@ void eeconfig_init_user() {
     }
 }
 
-// TODO: cleanup
-void m1v5_blink_advanced(uint8_t index, RGB rgb, uint32_t interval, uint8_t times);
-void hs_reset_settings(void);
+bool rk_bat_req_flag;
+
+uint32_t blink_timer;
+void     m1v5_blink(void) {
+    blink_timer = timer_read32();
+}
+
 void m1v5_bt_test(void);
 
 uint32_t ee_clr_callback(uint32_t trigger_time, void *cb_arg) {
-    hs_reset_settings();
+    eeconfig_init();
+    m1v5_blink();
+    return 0;
+}
+
+uint32_t ctrl_act_as_menu_callback(uint32_t trigger_time, void *cb_arg) {
+    confinfo.ctrl_act_as_menu = !confinfo.ctrl_act_as_menu;
+    m1v5_blink();
+    eeconfig_update_user(confinfo.raw);
     return 0;
 }
 
@@ -231,19 +244,21 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
         case HS_DIR: {
             if (record->event.pressed) {
                 confinfo.wasd_act_as_directional = !confinfo.wasd_act_as_directional;
-                RGB rgb_test_open;
-                rgb_test_open = hsv_to_rgb((HSV){.h = 0, .s = 0, .v = RGB_MATRIX_VAL_STEP * 5});
-                m1v5_blink_advanced(0xFF, (RGB){rgb_test_open.r, rgb_test_open.g, rgb_test_open.b}, 250, 1);
+                m1v5_blink();
                 eeconfig_update_user(confinfo.raw);
             }
             return false;
         } break;
 
         case HS_CT_A: {
+            static deferred_token delayed_exec = INVALID_DEFERRED_TOKEN;
+
             if (record->event.pressed) {
-                hs_ct_time = timer_read32();
-            } else {
-                hs_ct_time = 0;
+                delayed_exec = defer_exec(3000, ctrl_act_as_menu_callback, NULL);
+                return false;
+            } else if (delayed_exec != INVALID_DEFERRED_TOKEN) {
+                cancel_deferred_exec(delayed_exec);
+                delayed_exec = INVALID_DEFERRED_TOKEN;
             }
             return false;
         } break;
@@ -271,18 +286,113 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         } break;
+
+        case RGB_SPI: {
+            if (record->event.pressed) {
+                if (rgb_matrix_get_speed() >= (RGB_MATRIX_SPD_STEP * 5)) {
+                    m1v5_blink();
+                }
+            }
+        } break;
+        case RGB_SPD: {
+            if (record->event.pressed) {
+                if (rgb_matrix_get_speed() <= RGB_MATRIX_SPD_STEP * 2) {
+                    if (rgb_matrix_get_speed() != RGB_MATRIX_SPD_STEP) m1v5_blink();
+                    rgb_matrix_set_speed(RGB_MATRIX_SPD_STEP);
+
+                    return false;
+                }
+                m1v5_blink();
+            }
+        } break;
+        case RGB_VAI: {
+            if (record->event.pressed) {
+                rgb_matrix_enable();
+                gpio_write_pin_high(LED_POWER_EN_PIN);
+                if (rgb_matrix_get_val() == RGB_MATRIX_MAXIMUM_BRIGHTNESS) m1v5_blink();
+            }
+        } break;
+        case RGB_VAD: {
+            if (record->event.pressed) {
+                if (rgb_matrix_get_val() <= RGB_MATRIX_VAL_STEP) {
+                    gpio_write_pin_low(LED_POWER_EN_PIN);
+                    for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
+                        rgb_matrix_set_color(i, 0, 0, 0);
+                    }
+                }
+                if (rgb_matrix_get_val() == 0) m1v5_blink();
+            }
+        } break;
+
+        case HS_BATQ: {
+            rk_bat_req_flag = record->event.pressed;
+            return false;
+        } break;
+
+        // case KC_LCMD: {
+        //     if (keymap_is_mac_system()) {
+        //         if (keymap_config.no_gui) {
+        //             if (record->event.pressed) {
+        //                 register_code16(KC_LCMD);
+        //             } else {
+        //                 unregister_code16(KC_LCMD);
+        //             }
+        //         }
+        //     }
+
+        //     return true;
+        // } break;
+        // case KC_RCMD: {
+        //     if (keymap_is_mac_system()) {
+        //         if (keymap_config.no_gui) {
+        //             if (record->event.pressed) {
+        //                 register_code16(KC_RCMD);
+        //             } else {
+        //                 unregister_code16(KC_RCMD);
+        //             }
+        //         }
+        //     }
+
+        //     return true;
+        // } break;
     }
 
     return true;
 }
 
-void housekeeping_task_user(void) {
-    if (timer_elapsed32(hs_ct_time) > 3000 && hs_ct_time) {
-        confinfo.ctrl_act_as_menu = !confinfo.ctrl_act_as_menu;
-        RGB rgb_test_open;
-        rgb_test_open = hsv_to_rgb((HSV){.h = 0, .s = 0, .v = RGB_MATRIX_VAL_STEP * 5});
-        m1v5_blink_advanced(0xFF, (RGB){rgb_test_open.r, rgb_test_open.g, rgb_test_open.b}, 250, 1);
-        eeconfig_update_user(confinfo.raw);
-        hs_ct_time = 0;
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (blink_timer) {
+        if ((timer_elapsed32(blink_timer) / 250) % 2 == 0) {
+            rgb_matrix_set_color_all(0xFF, 0xFF, 0xFF);
+        } else {
+            rgb_matrix_set_color_all(0x00, 0x00, 0x00);
+        }
+
+        if (timer_elapsed32(blink_timer) > 1250) {
+            blink_timer = 0;
+        }
+        return false;
     }
+
+    if (rk_bat_req_flag) {
+        rgb_matrix_set_color_all(0x00, 0x00, 0x00);
+        for (uint8_t i = 0; i < 10; i++) {
+            uint8_t mi_index[10] = RGB_MATRIX_BAT_INDEX_MAP;
+            if ((i < (*md_getp_bat() / 10)) || (i < 1)) {
+                if (*md_getp_bat() >= (IM_BAT_REQ_LEVEL1_VAL)) {
+                    rgb_matrix_set_color(mi_index[i], IM_BAT_REQ_LEVEL1_COLOR);
+                } else if (*md_getp_bat() >= (IM_BAT_REQ_LEVEL2_VAL)) {
+                    rgb_matrix_set_color(mi_index[i], IM_BAT_REQ_LEVEL2_COLOR);
+                } else {
+                    rgb_matrix_set_color(mi_index[i], IM_BAT_REQ_LEVEL3_COLOR);
+                }
+            } else {
+                rgb_matrix_set_color(mi_index[i], 0x00, 0x00, 0x00);
+            }
+        }
+
+        return false;
+    }
+
+    return true;
 }

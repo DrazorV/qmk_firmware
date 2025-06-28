@@ -1,6 +1,7 @@
 // Copyright 2024 yangzheng20003 (@yangzheng20003)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include "module.h"
 #include QMK_KEYBOARD_H
 
 enum layers {
@@ -71,6 +72,10 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 };
 #endif
 
+// clang-format on
+
+bool rk_bat_req_flag;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case CUSTOM_CAPS:
@@ -83,9 +88,36 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
 
             return false;
+
+        case HS_BATQ: {
+            rk_bat_req_flag = record->event.pressed;
+            return false;
+        } break;
     }
 
     return true;
 }
 
-// clang-format on
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (rk_bat_req_flag) {
+        rgb_matrix_set_color_all(0x00, 0x00, 0x00);
+        for (uint8_t i = 0; i < 10; i++) {
+            uint8_t mi_index[10] = RGB_MATRIX_BAT_INDEX_MAP;
+            if ((i < (*md_getp_bat() / 10)) || (i < 1)) {
+                if (*md_getp_bat() >= (IM_BAT_REQ_LEVEL1_VAL)) {
+                    rgb_matrix_set_color(mi_index[i], IM_BAT_REQ_LEVEL1_COLOR);
+                } else if (*md_getp_bat() >= (IM_BAT_REQ_LEVEL2_VAL)) {
+                    rgb_matrix_set_color(mi_index[i], IM_BAT_REQ_LEVEL2_COLOR);
+                } else {
+                    rgb_matrix_set_color(mi_index[i], IM_BAT_REQ_LEVEL3_COLOR);
+                }
+            } else {
+                rgb_matrix_set_color(mi_index[i], 0x00, 0x00, 0x00);
+            }
+        }
+
+        return false;
+    }
+
+    return true;
+}
