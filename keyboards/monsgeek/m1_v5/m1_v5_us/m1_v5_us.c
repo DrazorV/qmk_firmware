@@ -165,7 +165,7 @@ void m1v5_bt_test(void) {
     md_send_devctrl(0x62);
 }
 
-uint32_t wls_process_long_press(uint32_t trigger_time, void *cb_arg) {
+static uint32_t wls_process_long_press(uint32_t trigger_time, void *cb_arg) {
     uint16_t keycode = *((uint16_t *)cb_arg);
 
     switch (keycode) {
@@ -205,7 +205,7 @@ uint32_t wls_process_long_press(uint32_t trigger_time, void *cb_arg) {
     return 0;
 }
 
-bool process_record_wls(uint16_t keycode, keyrecord_t *record) {
+static bool process_record_wls(uint16_t keycode, keyrecord_t *record) {
     static uint16_t       keycode_shadow               = 0x00;
     static deferred_token wls_process_long_press_token = INVALID_DEFERRED_TOKEN;
 
@@ -375,7 +375,7 @@ uint32_t wls_rgb_indicator_times    = 0;
 uint32_t wls_rgb_indicator_index    = 0;
 RGB      wls_rgb_indicator_rgb      = {0};
 
-void rgb_matrix_wls_indicator_set(uint8_t index, RGB rgb, uint32_t interval, uint8_t times) {
+static void rgb_matrix_wls_indicator_set(uint8_t index, RGB rgb, uint32_t interval, uint8_t times) {
     wls_rgb_indicator_timer = timer_read32();
 
     wls_rgb_indicator_index    = index;
@@ -384,7 +384,7 @@ void rgb_matrix_wls_indicator_set(uint8_t index, RGB rgb, uint32_t interval, uin
     wls_rgb_indicator_rgb      = rgb;
 }
 
-void rgb_matrix_wls_indicator_wls(uint8_t devs) {
+static void rgb_matrix_wls_indicator_wls(uint8_t devs) {
     uint32_t interval = wls_rgb_indicator_reset ? 200 : 500;
 
     switch (devs) {
@@ -418,7 +418,7 @@ void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
     rgb_matrix_wls_indicator_wls(new_devs);
 }
 
-void rgb_matrix_wls_indicator(void) {
+static void rgb_matrix_wls_indicator(void) {
     if (wls_rgb_indicator_timer) {
         if (timer_elapsed32(wls_rgb_indicator_timer) >= wls_rgb_indicator_interval) {
             wls_rgb_indicator_timer = timer_read32();
