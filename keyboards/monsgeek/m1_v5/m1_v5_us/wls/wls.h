@@ -1,8 +1,4 @@
-#include QMK_KEYBOARD_H
-
-#include "quantum.h"
 #include <stdbool.h>
-#include "wireless.h"
 
 // #define HS_BT_DEF_PIN                     C14
 // #define HS_2G4_DEF_PIN                    C15

@@ -217,7 +217,7 @@ void wireless_pre_task(void) {}
 void wireless_post_task(void) __attribute__((weak));
 void wireless_post_task(void) {}
 
-void wireless_task(void) {
+void wireless_housekeeping_task(void) {
 
     wireless_pre_task();
     lpwr_task();
@@ -238,9 +238,4 @@ void wireless_task(void) {
             }
         }
     }
-}
-
-void housekeeping_task_kb(void) {
-
-    wireless_task();
 }

@@ -260,8 +260,3 @@ void wireless_task(void) {
         }
     }
 }
-
-void housekeeping_task_kb(void) {
-
-    wireless_task();
-}

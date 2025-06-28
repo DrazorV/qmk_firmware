@@ -1,4 +1,9 @@
 #include "wls.h"
+#include QMK_KEYBOARD_H
+#include "wireless.h"
+
+#include "lowpower.h"
+#include "module.h"
 
 static ioline_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
 
