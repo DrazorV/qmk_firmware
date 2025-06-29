@@ -28,7 +28,7 @@
 #define HS_LBACK_COLOR_BT1                  RGB_BLUE
 #define HS_LBACK_COLOR_BT2                  RGB_BLUE
 #define HS_LBACK_COLOR_BT3                  RGB_BLUE
-#define HS_LBACK_COLOR_2G4                  RGB_RED
+#define HS_LBACK_COLOR_2G4                  RGB_GREEN
 #define HS_LBACK_COLOR_USB                  RGB_WHITE
 
 /* Battery */
