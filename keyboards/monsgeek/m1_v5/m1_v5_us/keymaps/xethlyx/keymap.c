@@ -15,6 +15,7 @@ enum layers {
 enum custom_keycodes {
     HS_BATQ = SAFE_RANGE,
     CUSTOM_CAPS,
+    KEEP_AWAKE,
 };
 
 #define ______ HS_BLACK
@@ -34,7 +35,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         QK_BOOT,  KC_MYCM,  KC_MAIL,  KC_WSCH,  KC_WHOM,  KC_MSEL,  KC_MPLY,  KC_MPRV,  KC_MNXT,  _______,  _______,  _______,  _______,  RGB_MOD,  _______,
         EE_CLR,   _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  RGB_SPD,  RGB_SPI,  _______,  _______,
         _______,  _______,  _______,   KC_BT1,   KC_BT2,   KC_BT3,   KC_2G4,   KC_USB,   KC_INS,   _______,  KC_PSCR,  _______,  _______,  _______,  _______,
-        KC_CAPS,  _______, _______,  _______,  _______,   _______,  _______,  _______,  _______,  RGB_TOG,  _______,  _______,            _______,  _______,
+        KC_CAPS,  _______, _______,  _______,  _______,   _______,  _______,  KEEP_AWAKE,  _______,  RGB_TOG,  _______,  _______,            _______,  _______,
         _______,            _______,  _______,  KC_CALC,  _______,  _______,  _______,  KC_MUTE,  KC_VOLD,  KC_VOLU,  _______,  MO(_FBL), RGB_VAI,  _______,
         _______,   GU_TOGG,  _______,                     HS_BATQ,                                _______,  _______,  _______,  RGB_SAI,  RGB_VAD,  RGB_SAD),
 
@@ -50,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,  KC_BRID,  KC_BRIU,  KC_MCTL,  _______,  _______,  _______,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  RGB_MOD,  _______,
         EE_CLR,   _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  RGB_SPD,  RGB_SPI,  _______,  _______,
         _______,  _______,  _______,   KC_BT1,   KC_BT2,   KC_BT3,   KC_2G4,   KC_USB,   KC_INS,   _______,  KC_PSCR,  _______,  _______,  _______,  _______,
-        KC_CAPS,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  RGB_TOG,  _______,  _______,            _______,  _______,
+        KC_CAPS,  _______,  _______,  _______,  _______,  _______,  _______,  KEEP_AWAKE,  _______,  RGB_TOG,  _______,  _______,            _______,  _______,
         _______,            _______,  _______,  KC_CALC,  _______,  _______,  _______,  KC_MUTE,  KC_VOLD,  KC_VOLU,  _______,  MO(_FBL), RGB_VAI,  _______,
         _______,  _______,  _______,                      HS_BATQ,                                _______,  _______,  _______,  RGB_SAI,  RGB_VAD,  RGB_SAD),
     [_FBL] = LAYOUT( /* ? */
@@ -77,9 +78,25 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 
 bool rk_bat_req_flag;
 
+#define KEEP_AWAKE_KEY KC_LSFT
+#define KEEP_AWAKE_INTERVAL 5000
+uint32_t keep_awake_timer;
+bool     keep_awake_pressed = false;
+
+uint32_t keep_awake_callback(uint32_t trigger_time, void *cb_arg) {
+    if (keep_awake_pressed) {
+        unregister_code(KEEP_AWAKE_KEY);
+    } else {
+        register_code(KEEP_AWAKE_KEY);
+    }
+
+    keep_awake_pressed = !keep_awake_pressed;
+    return 5000;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case CUSTOM_CAPS:
+        case CUSTOM_CAPS: {
             if (record->event.pressed) {
                 register_code(KC_LALT);
                 register_code(KC_LSFT);
@@ -89,6 +106,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
 
             return false;
+        } break;
+
+        case KEEP_AWAKE: {
+            static deferred_token delayed_exec = INVALID_DEFERRED_TOKEN;
+
+            if (record->event.pressed) {
+                if (keep_awake_timer) {
+                    cancel_deferred_exec(delayed_exec);
+                    if (keep_awake_pressed) {
+                        unregister_code(KEEP_AWAKE_KEY);
+                        keep_awake_pressed = false;
+                    }
+                    keep_awake_timer = 0;
+                    delayed_exec     = INVALID_DEFERRED_TOKEN;
+                } else {
+                    delayed_exec     = defer_exec(KEEP_AWAKE_INTERVAL, keep_awake_callback, NULL);
+                    if (delayed_exec != INVALID_DEFERRED_TOKEN) keep_awake_timer = timer_read();
+                }
+                return false;
+            }
+
+            return false;
+        } break;
 
         case HS_BATQ: {
             rk_bat_req_flag = record->event.pressed;
@@ -118,6 +158,14 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         }
 
         return false;
+    }
+
+    if (keep_awake_timer) {
+        if (timer_elapsed(keep_awake_timer) / 500 % 2) {
+            rgb_matrix_set_color(59, 0xFF, 0xFF, 0xFF);
+        } else {
+            rgb_matrix_set_color(59, 0x00, 0x00, 0x00);
+        }
     }
 
     return true;
