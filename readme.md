@@ -1,3 +1,14 @@
+> [!NOTE]
+> This is my personal fork of MonsGeek's QMK firmware. This includes my changes for M1V5 VIA:
+>  - Separated keyboard and userspace, with most functionality moved to the default keymap
+>  - Fixed freezing issue while connected via USB only
+>  - Removed unused code and cleaned up default code, shaving 4KB off of the firmware
+>  - Added my own keymap
+>
+> This also contains the following fixes sourced from the internet (see commit history for more details):
+>  - Updated past QMK November 2024 breakpoint
+>  - Updated wireless module
+
 # Quantum Mechanical Keyboard Firmware
 
 [![Current Version](https://img.shields.io/github/tag/qmk/qmk_firmware.svg)](https://github.com/qmk/qmk_firmware/tags)
