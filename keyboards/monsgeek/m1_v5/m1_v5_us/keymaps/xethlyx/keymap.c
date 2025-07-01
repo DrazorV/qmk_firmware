@@ -167,7 +167,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
 
     if (keep_awake_timer) {
-        if (timer_elapsed(keep_awake_timer) / 500 % 2) {
+        if (timer_elapsed(keep_awake_timer) / 500 % 2 == 0) {
             rgb_matrix_set_color(59, 0xFF, 0xFF, 0xFF);
         } else {
             rgb_matrix_set_color(59, 0x00, 0x00, 0x00);
