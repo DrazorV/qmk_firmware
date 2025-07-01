@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "module.h"
+#include "wls/wls.h"
 #include QMK_KEYBOARD_H
 
 enum layers {
@@ -88,6 +89,11 @@ uint32_t keep_awake_callback(uint32_t trigger_time, void *cb_arg) {
         unregister_code(KEEP_AWAKE_KEY);
     } else {
         register_code(KEEP_AWAKE_KEY);
+    }
+
+    // prevent timeout
+    if (*md_getp_state() == MD_STATE_CONNECTED) {
+        hs_rgb_blink_set_timer(timer_read32());
     }
 
     keep_awake_pressed = !keep_awake_pressed;

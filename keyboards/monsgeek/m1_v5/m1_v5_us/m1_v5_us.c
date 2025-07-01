@@ -280,6 +280,11 @@ static bool process_record_wls(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+    // prevent timeout
+    if (*md_getp_state() == MD_STATE_CONNECTED) {
+        hs_rgb_blink_set_timer(timer_read32());
+    }
+
     if (process_record_user(keycode, record) != true) {
         return false;
     }
