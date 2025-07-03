@@ -342,7 +342,7 @@ bool process_record_wls(uint16_t keycode, keyrecord_t *record) {
 }
 #endif
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool process_record_user_mfg(uint16_t keycode, keyrecord_t *record) {
 
     if (test_white_light_flag && record->event.pressed) {
         test_white_light_flag = false;
