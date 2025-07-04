@@ -145,7 +145,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+bool rgb_matrix_indicators_user() {
     if (rk_bat_req_flag) {
         rgb_matrix_set_color_all(0x00, 0x00, 0x00);
         for (uint8_t i = 0; i < 10; i++) {

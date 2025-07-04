@@ -460,8 +460,8 @@ static void rgb_matrix_wls_indicator(void) {
 
 #endif
 
-bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
-    if (!rgb_matrix_indicators_advanced_user(led_min, led_max)) {
+bool rgb_matrix_indicators_kb() {
+    if (!rgb_matrix_indicators_user()) {
         return false;
     }
 

@@ -360,7 +360,7 @@ bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+bool rgb_matrix_indicators_user() {
     if (blink_timer) {
         if ((timer_elapsed32(blink_timer) / 250) % 2 == 0) {
             rgb_matrix_set_color_all(0xFF, 0xFF, 0xFF);
