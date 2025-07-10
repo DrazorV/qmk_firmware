@@ -16,9 +16,9 @@ enum layers {
 };
 
 // These macros must be defined in a shared file or directly here
-uint8_t caps_lock_letter_list[27] = CAPS_LOCK_LETTER_LIST;
+uint8_t caps_lock_letter_list[26] = CAPS_LOCK_LETTER_LIST;
 uint8_t number_list[14] = NUMBER_LIST;
-uint8_t func_list[30] = FUNC_LIST;
+uint8_t func_list[12] = FUNC_LIST;
 bool process_record_user_mine(uint16_t keycode, keyrecord_t *record);
 bool process_record_user_mfg(uint16_t keycode, keyrecord_t *record);
 
@@ -158,7 +158,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         }
     }
 
-    return false;
+    return true;
 }
 
 

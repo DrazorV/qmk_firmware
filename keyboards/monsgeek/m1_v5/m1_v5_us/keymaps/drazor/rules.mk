@@ -1,5 +1,6 @@
 EEPROM_ENABLE = yes
 VIA_ENABLE = yes
+LTO_ENABLE = yes
 RAW_ENABLE = yes
 SRC += eeprom_settings.c
 AUTOCORRECT_ENABLE = yes
