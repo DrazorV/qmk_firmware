@@ -85,57 +85,57 @@
           ]
         },
         {
-            "label": "Indicators",
-            "content": [
-                {
-                "label": "Caps Lock Indicator",
-                "type": "toggle",
-                "content": ["caps_lock_ind", 0, 7]
-                },
-                {
-                "label": "Caps Lock Color",
-                "type": "color",
-                "content": ["caps_lock", 0, 1]
-                },
-                {
-                "label": "Caps Lock Brightness",
-                "type": "range",
-                "options": [0, 255],
-                "content": ["caps_lock_br", 0, 4]
-                },
-                {
-                "label": "FN Layer Indicator",
-                "type": "toggle",
-                "content": ["layer1_ind", 0, 8]
-                },
-                {
-                "label": "FN Layer Color",
-                "type": "color",
-                "content": ["layer1", 0, 2]
-                },
-                {
-                "label": "FN Layer Brightness",
-                "type": "range",
-                "options": [0, 255],
-                "content": ["layer1_br", 0, 5]
-                },
-                {
-                "label": "NumLock Layer Indicator",
-                "type": "toggle",
-                "content": ["layer2_ind", 0, 9]
-                },
-                {
-                "label": "NumLock Layer Color",
-                "type": "color",
-                "content": ["layer2", 0, 3]
-                },
-                {
-                "label": "NumLock Layer Brightness",
-                "type": "range",
-                "options": [0, 255],
-                "content": ["layer2_br", 0, 6]
-                }
-            ]
+          "label": "Indicators",
+          "content": [
+            {
+              "label": "Caps Lock Indicator",
+              "type": "toggle",
+              "content": ["caps_lock_ind", 0, 7]
+            },
+            {
+              "label": "Caps Lock Color",
+              "type": "color",
+              "content": ["caps_lock", 0, 1]
+            },
+            {
+              "label": "Caps Lock Brightness",
+              "type": "range",
+              "options": [0, 255],
+              "content": ["caps_lock_br", 0, 4]
+            },
+            {
+              "label": "FN Layer Indicator",
+              "type": "toggle",
+              "content": ["layer1_ind", 0, 8]
+            },
+            {
+              "label": "FN Layer Color",
+              "type": "color",
+              "content": ["layer1", 0, 2]
+            },
+            {
+              "label": "FN Layer Brightness",
+              "type": "range",
+              "options": [0, 255],
+              "content": ["layer1_br", 0, 5]
+            },
+            {
+              "label": "NumLock Layer Indicator",
+              "type": "toggle",
+              "content": ["layer2_ind", 0, 9]
+            },
+            {
+              "label": "NumLock Layer Color",
+              "type": "color",
+              "content": ["layer2", 0, 3]
+            },
+            {
+              "label": "NumLock Layer Brightness",
+              "type": "range",
+              "options": [0, 255],
+              "content": ["layer2_br", 0, 6]
+            }
+          ]
         }
       ]
     }
@@ -148,7 +148,12 @@
     {"name": "BT DEV4","title": "BT Device 4","shortName": "DEV4"},
     {"name": "BT DEV5","title": "BT Device 5","shortName": "DEV5"},
     {"name": "2.4G","title": "2.4G","shortName": "DEV 2.4G"},
-    {"name": "USB","title": "USB","shortName": "DEV USB"}
+    {"name": "USB","title": "USB","shortName": "DEV USB"},
+    {
+      "name": "Autocorrect Toggle",
+      "title": "Enables or Disables the autocorrect function of the keyboard",
+      "shortName": "AC_TOGG"
+    }
   ],
   "layouts": {
       "keymap":
