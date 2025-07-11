@@ -164,4 +164,9 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
 void keyboard_post_init_user(void) {
     load_user_config();  // Load user config from EEPROM
+
+    // DEBUG: Print all RGB Matrix LED indexes and their position
+    for (uint8_t i = 0; i < DRIVER_LED_TOTAL; i++) {
+        dprintf("LED %02d → x=%3d, y=%3d\n", i, g_led_config.point[i].x, g_led_config.point[i].y);
+    }
 }

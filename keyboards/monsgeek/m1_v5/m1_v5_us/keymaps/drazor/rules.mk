@@ -1,7 +1,12 @@
 EEPROM_ENABLE = yes
 VIA_ENABLE = yes
-LTO_ENABLE = yes
-RAW_ENABLE = yes
+LTO_ENABLE = no
+RAW_ENABLE = no
 SRC += eeprom_settings.c
 AUTOCORRECT_ENABLE = yes
 RGB_MATRIX_ENABLE = yes
+EEPROM_DRIVER = wear_leveling
+WEAR_LEVELING_DRIVER = embedded_flash
+CONSOLE_ENABLE = yes
+STENO_ENABLE = no
+SERIAL_ENABLE = no

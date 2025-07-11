@@ -3,7 +3,7 @@
 // -------------------------
 
 // Total size your config struct uses — adjust if fields are added
-#define USER_CONFIG_SIZE sizeof(user_config_t)
+#define USER_CONFIG_SIZE 16
 
 // Start your block *after* all manufacturer-defined data
 #define EECONFIG_USER_CONFIG_OFFSET (EECONFIG_USER_DATA_SIZE)

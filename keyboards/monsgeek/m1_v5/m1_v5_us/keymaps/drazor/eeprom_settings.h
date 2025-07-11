@@ -19,9 +19,6 @@ typedef union {
     } __attribute__((packed)); // Ensure no padding
 } user_config_t;
 
-extern user_config_t user_config;
-
-
 // Global Variable
 extern user_config_t user_config;
 
