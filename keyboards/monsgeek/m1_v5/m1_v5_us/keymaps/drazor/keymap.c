@@ -6,6 +6,7 @@
 #include "config.h"
 #include "eeprom_settings.h"
 #include "eeprom.h"
+#include "rgb_matrix.h"
 
 enum layers {
     _BL = 0,
@@ -162,11 +163,61 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 }
 
 
-void keyboard_post_init_user(void) {
-    load_user_config();  // Load user config from EEPROM
+#include "quantum.h"
+#include "rgb_matrix.h"
+#include "rgb_record.h"
 
-    // DEBUG: Print all RGB Matrix LED indexes and their position
-    for (uint8_t i = 0; i < DRIVER_LED_TOTAL; i++) {
-        dprintf("LED %02d → x=%3d, y=%3d\n", i, g_led_config.point[i].x, g_led_config.point[i].y);
+void keyboard_post_init_user(void) {
+    const uint16_t red_keys[] = {
+        KC_A, KC_B, KC_C, KC_D, KC_E, KC_F, KC_G, KC_H, KC_I, KC_J,
+        KC_K, KC_L, KC_M, KC_N, KC_O, KC_P, KC_Q, KC_R, KC_S, KC_T,
+        KC_U, KC_V, KC_W, KC_X, KC_Y, KC_Z
+    };
+
+    const uint16_t green_keys[] = {
+        KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0,
+        KC_MINUS, KC_EQUAL, KC_LBRC, KC_RBRC
+    };
+
+    const uint16_t blue_keys[] = {
+        KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6,
+        KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12
+    };
+
+    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+        for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+            uint16_t keycode = keymap_key_to_keycode(0, (keypos_t){row, col});
+            uint8_t led_index;
+
+            if (g_led_config.matrix_co[row][col] == NO_LED) continue;
+            if (!find_matrix_row_col(g_led_config.matrix_co[row][col], &row, &col)) continue;
+
+            led_index = g_led_config.matrix_co[row][col];
+
+            for (uint8_t i = 0; i < sizeof(red_keys)/sizeof(red_keys[0]); i++) {
+                if (keycode == red_keys[i]) {
+                    rgb_matrix_set_color(led_index, 255, 0, 0); // Red
+                    goto next_key;
+                }
+            }
+
+            for (uint8_t i = 0; i < sizeof(green_keys)/sizeof(green_keys[0]); i++) {
+                if (keycode == green_keys[i]) {
+                    rgb_matrix_set_color(led_index, 0, 255, 0); // Green
+                    goto next_key;
+                }
+            }
+
+            for (uint8_t i = 0; i < sizeof(blue_keys)/sizeof(blue_keys[0]); i++) {
+                if (keycode == blue_keys[i]) {
+                    rgb_matrix_set_color(led_index, 0, 0, 255); // Blue
+                    goto next_key;
+                }
+            }
+
+        next_key:
+            continue;
+        }
     }
 }
+
