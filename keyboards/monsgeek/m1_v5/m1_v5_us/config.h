@@ -12,7 +12,6 @@
 #define BAT_FULL_STATE                      1
 
 #define HS_RGB_INDICATOR_COUNT              99
-#define HS_RGB_BAT_COUNT                    1
 
 #define MD_BT1_NAME                         "M1 V5"
 #define MD_BT2_NAME                         "M1 V5"
@@ -29,14 +28,8 @@
 #define HS_LBACK_COLOR_BT1                  RGB_BLUE
 #define HS_LBACK_COLOR_BT2                  RGB_BLUE
 #define HS_LBACK_COLOR_BT3                  RGB_BLUE
-#define HS_LBACK_COLOR_2G4                  RGB_RED
+#define HS_LBACK_COLOR_2G4                  RGB_GREEN
 #define HS_LBACK_COLOR_USB                  RGB_WHITE
-
-#define HS_PAIR_COLOR_BT1                   RGB_BLUE
-#define HS_PAIR_COLOR_BT2                   RGB_BLUE
-#define HS_PAIR_COLOR_BT3                   RGB_BLUE
-#define HS_PAIR_COLOR_2G4                   RGB_RED
-#define HS_PAIR_COLOR_USB                   RGB_WHITE
 
 /* Battery */
 #define BATTERY_CAPACITY_LOW                15
@@ -80,11 +73,12 @@
 #define WS2812_SPI_DRIVER  SPIDM2
 #define WS2812_SPI_DIVISOR 32
 
-/* rgb_record */
-#define ENABLE_RGB_MATRIX_RGBR_PLAY
-#define RGBREC_CHANNEL_NUM         4
-#define EECONFIG_CONFINFO_USE_SIZE (4 + 16)
-#define EECONFIG_RGBREC_USE_SIZE   (RGBREC_CHANNEL_NUM * MATRIX_ROWS * MATRIX_COLS * 2)
-#define EECONFIG_USER_DATA_SIZE    (EECONFIG_RGBREC_USE_SIZE + EECONFIG_CONFINFO_USE_SIZE)
-#define RGBREC_EECONFIG_ADDR       (uint8_t *)(EECONFIG_USER_DATABLOCK)
-#define CONFINFO_EECONFIG_ADDR     (uint32_t *)((uint32_t)RGBREC_EECONFIG_ADDR + (uint32_t)EECONFIG_RGBREC_USE_SIZE)
+/* Battery Indicator */
+#define RGB_MATRIX_BAT_VAL      150
+#define IM_BAT_REQ_LEVEL1_VAL   50
+#define IM_BAT_REQ_LEVEL1_COLOR 0x00, RGB_MATRIX_BAT_VAL, 0x00
+
+#define IM_BAT_REQ_LEVEL2_VAL   30
+#define IM_BAT_REQ_LEVEL2_COLOR 0x00, RGB_MATRIX_BAT_VAL, 0x00
+
+#define IM_BAT_REQ_LEVEL3_COLOR RGB_MATRIX_BAT_VAL, 0x00, 0x00

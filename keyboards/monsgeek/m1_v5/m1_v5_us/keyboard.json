@@ -21,6 +21,7 @@
         ]
     },
     "features": {
+        "bootmagic": true,
         "command": false,
         "console": false,
         "extrakey": true,
@@ -46,36 +47,6 @@
         },
         {
             "key": "KC_USB"
-        },
-        {
-            "key": "RP_P0"
-        },
-        {
-            "key": "RP_P1"
-        },
-        {
-            "key": "RP_P2"
-        },
-        {
-            "key": "RP_END"
-        },
-        {
-            "key": "RL_MOD"
-        },
-        {
-            "key": "HS_BATQ"
-        },
-        {
-            "key": "HS_DIR"
-        },
-        {
-            "key": "BT_TEST"
-        },
-        {
-            "key": "HS_SIRI"
-        },
-        {
-            "key": "HS_CT_A"
         }
     ],
     "dynamic_keymap": {
@@ -135,7 +106,7 @@
         },
         "driver": "ws2812",
         "layout": [
-            {"matrix": [5,  9], "x": 144, "y": 64, "flags": 4}, 
+            {"matrix": [5,  9], "x": 144, "y": 64, "flags": 4},
             {"matrix": [5, 10], "x": 160, "y": 64, "flags": 4},
             {"matrix": [5, 11], "x": 176, "y": 64, "flags": 4},
             {"matrix": [5, 12], "x": 192, "y": 64, "flags": 4},
