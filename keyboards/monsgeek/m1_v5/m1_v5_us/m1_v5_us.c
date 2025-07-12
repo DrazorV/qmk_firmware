@@ -281,12 +281,7 @@ static bool process_record_wls(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
-
-    if (test_white_light_flag && record->event.pressed) {
-        test_white_light_flag = false;
-        rgb_matrix_set_color_all(0x00, 0x00, 0x00);
-    }
-
+    // prevent timeout
     if (*md_getp_state() == MD_STATE_CONNECTED) {
         hs_rgb_blink_set_timer(timer_read32());
     }
