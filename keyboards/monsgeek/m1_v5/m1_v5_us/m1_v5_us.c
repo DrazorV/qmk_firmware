@@ -47,7 +47,6 @@ bool     charging_state    = false;
 bool     battery_full_flag = false;
 HSV      start_hsv;
 bool     lower_sleep = false;
-bool test_white_light_flag = false;
 
 void keyboard_post_init_kb(void) {
 #ifdef CONSOLE_ENABLE
