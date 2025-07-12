@@ -47,7 +47,6 @@ bool     charging_state    = false;
 bool     battery_full_flag = false;
 HSV      start_hsv;
 bool     lower_sleep = false;
-bool test_white_light_flag = false;
 
 void keyboard_post_init_kb(void) {
 #ifdef CONSOLE_ENABLE
@@ -281,12 +280,7 @@ static bool process_record_wls(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
-
-    if (test_white_light_flag && record->event.pressed) {
-        test_white_light_flag = false;
-        rgb_matrix_set_color_all(0x00, 0x00, 0x00);
-    }
-
+    // prevent timeout
     if (*md_getp_state() == MD_STATE_CONNECTED) {
         hs_rgb_blink_set_timer(timer_read32());
     }
