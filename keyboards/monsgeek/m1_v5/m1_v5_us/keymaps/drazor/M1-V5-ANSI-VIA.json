@@ -149,11 +149,9 @@
     {"name": "BT DEV5","title": "BT Device 5","shortName": "DEV5"},
     {"name": "2.4G","title": "2.4G","shortName": "DEV 2.4G"},
     {"name": "USB","title": "USB","shortName": "DEV USB"},
-    {
-      "name": "Autocorrect Toggle",
-      "title": "Enables or Disables the autocorrect function of the keyboard",
-      "shortName": "AC_TOGG"
-    }
+    {"name": "AC_TOGGLE","title": "Autocorrect Toggle","shortName": "AC_TOG"},
+    {"name": "HS_BATQ", "title": "Battery Query", "shortName": "BATQ"},
+    {"name": "KEEP_AWAKE", "title": "Keep Awake", "shortName": "AWAKE"}
   ],
   "layouts": {
       "keymap":
