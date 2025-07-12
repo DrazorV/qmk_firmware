@@ -30,9 +30,13 @@ enum combos {
 
 
 // These macros must be defined in a shared file or directly here
-uint8_t caps_lock_letter_list[26] = CAPS_LOCK_LETTER_LIST;
-uint8_t number_list[14] = NUMBER_LIST;
-uint8_t func_list[14] = FUNC_LIST;
+uint8_t caps_lock_letter_list[] = CAPS_LOCK_LETTER_LIST;
+uint8_t number_list[] = NUMBER_LIST;
+uint8_t func_list[]   = FUNC_LIST;
+#define CAPS_LOCK_LETTER_COUNT (sizeof(caps_lock_letter_list)/sizeof(caps_lock_letter_list[0]))
+#define NUMBER_LIST_COUNT (sizeof(number_list)/sizeof(number_list[0]))
+#define FUNC_LIST_COUNT   (sizeof(func_list)/sizeof(func_list[0]))
+
 
 #define ______ HS_BLACK
 
