@@ -66,8 +66,8 @@
                 ["Multisplash", 42],
                 ["Solid Splash", 43],
                 ["Solid Multisplash", 44],
-                ["Close All", 45]
-              ]
+                ["Riverflow", 45]
+                ]
             },
             {
               "showIf": "{id_qmk_rgb_matrix_effect} != 0",
