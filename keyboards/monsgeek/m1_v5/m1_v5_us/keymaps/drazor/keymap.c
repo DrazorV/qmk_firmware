@@ -56,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         EE_CLR,   KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  RGB_SPD,  RGB_SPI,  KC_TRNS,  KC_TRNS,
         QK_RBT,  KC_TRNS,  KC_TRNS,   KC_BT1,   KC_BT2,   KC_BT3,   KC_2G4,   KC_USB,   KC_INS,   KC_TRNS,  KC_PSCR,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
         KC_CAPS,  KC_TRNS, KC_TRNS,  KC_TRNS,  KC_TRNS,   KC_TRNS,  KC_TRNS,  KEEP_AWAKE,  KC_TRNS,  RGB_TOG,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS,
-        KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_CALC,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  MO(_FBL), RGB_VAI,  KC_TRNS,
+        KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_CALC,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  KC_TRNS, RGB_VAI,  KC_TRNS,
         KC_TRNS,   GU_TOGG,  KC_TRNS,                     HS_BATQ,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  RGB_SAI,  RGB_VAD,  RGB_SAD),
 
     [_MBL] = LAYOUT( /* Base (Mac) */
@@ -74,6 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_CAPS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KEEP_AWAKE,  KC_TRNS,  RGB_TOG,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS,
         KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_CALC,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  MO(_FBL), RGB_VAI,  KC_TRNS,
         KC_TRNS,  KC_TRNS,  KC_TRNS,                      HS_BATQ,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  RGB_SAI,  RGB_VAD,  RGB_SAD),
+
     [_NL] = LAYOUT( /* Number Layer */
         KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
         KC_TRNS,  KC_KP_1,  KC_KP_2,  KC_KP_3,  KC_KP_4,  KC_KP_5,  KC_KP_6,  KC_KP_7,  KC_KP_8,  KC_KP_9,  KC_KP_0,  KC_KP_MINUS, KC_KP_PLUS, KC_BSPC,  KC_TRNS,
@@ -104,8 +105,8 @@ bool rk_bat_req_flag;
 uint32_t keep_awake_timer;
 bool     keep_awake_pressed = false;
 
-// Define the combo: RALT + GRV
-const uint16_t PROGMEM nl_combo[] = {KC_RALT, KC_GRV, COMBO_END};
+// Define the combo: RALT + HOME
+const uint16_t PROGMEM nl_combo[] = {KC_RALT, KC_HOME, COMBO_END};
 
 combo_t key_combos[] = {
     [NLAYER_TOGGLE_COMBO] = COMBO_ACTION(nl_combo),
@@ -115,7 +116,6 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
     switch(combo_index) {
         case NLAYER_TOGGLE_COMBO:
             if (pressed) {
-                // Toggle the _NL layer
                 layer_invert(_NL);
             }
             break;
@@ -168,7 +168,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } break;
 
             case HS_BATQ: {
-                rk_bat_req_flag = record->event.pressed;
+                if (record->event.pressed) {
+                    rk_bat_req_flag = !rk_bat_req_flag;
+                }
                 return false;
             } break;
         }
@@ -194,8 +196,6 @@ bool rgb_matrix_indicators_user() {
                 rgb_matrix_set_color(mi_index[i], 0x00, 0x00, 0x00);
             }
         }
-
-        return false;
     }
 
     if (keep_awake_timer) {
