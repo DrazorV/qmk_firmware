@@ -243,4 +243,3 @@ void keyboard_post_init_user(void) {
     eeconfig_read_user_datablock(&user_config);
 }
 
-
