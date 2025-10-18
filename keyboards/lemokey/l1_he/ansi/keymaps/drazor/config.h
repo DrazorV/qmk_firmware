@@ -15,12 +15,11 @@
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
-// #ifdef SNLED27351_CURRENT_TUNE
-// #undef SNLED27351_CURRENT_TUNE
-// #endif
+//  #ifdef SNLED27351_CURRENT_TUNE
+//  #undef SNLED27351_CURRENT_TUNE
+//  #endif
 
-//  #define SNLED27351_CURRENT_TUNE \
-//     { 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40 }
+//  #define SNLED27351_CURRENT_TUNE { 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40 }
 
 
 #ifdef RGB_MATRIX_ENABLE
