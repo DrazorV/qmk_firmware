@@ -176,3 +176,18 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 void keyboard_post_init_user(void) {
     eeconfig_read_user_datablock(&user_config);
 }
+
+
+void keyboard_init_user(void) {
+    eeconfig_read_user_datablock(&user_config);
+}
+
+
+void eeconfig_init_user(void) {
+    user_config.br = 255;                            // Full brightness
+    user_config.fn_hs = (HSV){191, 255, 255};        // Purple
+    user_config.caps_lock_hs = (HSV){85, 255, 255};  // Lime green
+
+    // Save defaults to EEPROM immediately
+    eeconfig_update_user_datablock(&user_config);
+}
