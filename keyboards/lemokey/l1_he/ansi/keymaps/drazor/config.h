@@ -5,13 +5,15 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define EECONFIG_USER_DATA_SIZE 15
+#define EECONFIG_USER_DATA_SIZE 7
 #define CAPS_LOCK_LETTER_LIST \
 { 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 63, 64, 65, 66, 67, 68, 69 }
 #define NUMBER_LIST \
-{ 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 42, 43 }
-#define FUNC_LIST \
-{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+{ 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 42, 43 }
+#define FN_LIST \
+{ 14, 29, 45, 60, 16, 17, 18, 19, 63, 64, 65, 67 }
+#define MACRO_KEYS \
+{ 30, 46, 61, 75 }
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
